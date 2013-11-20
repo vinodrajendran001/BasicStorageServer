@@ -196,6 +196,7 @@ logger.info("try to close connection ...");
 		this.SendMessage(messageToSend.encodeKVMessage());
 		HandleKVMessage messageToReceive = new HandleKVMessage();
 		messageToReceive.decodeKVMessage(this.receiveMessage());
+		
 		return messageToReceive;
 	}
 	

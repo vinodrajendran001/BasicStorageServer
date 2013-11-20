@@ -37,7 +37,7 @@ public class Server extends Thread {
      * Initializes and starts the server. 
      * Loops until the the server should be closed.
      */
-    public void run() {
+    public void run() { 
         
     	running = initializeServer();
         

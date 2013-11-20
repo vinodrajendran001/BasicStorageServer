@@ -21,7 +21,7 @@ public class KVServer extends Thread  {
         
 private static Logger logger = Logger.getRootLogger();
         
-        private int port;
+        private int port; 
     private ServerSocket serverSocket; 
     private boolean running;
     List <Data> p = new ArrayList<Data>();

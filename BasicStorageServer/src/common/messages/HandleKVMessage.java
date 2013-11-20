@@ -78,6 +78,7 @@ public class HandleKVMessage implements KVMessage {
                     valueString[i] = KVMessage[i + keyString.length + 3];
             //get the string from the byte array
             this.value = new String(valueString);
+            
     }
 
 }

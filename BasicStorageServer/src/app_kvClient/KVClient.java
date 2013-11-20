@@ -160,18 +160,14 @@ public class KVClient implements ClientSocketListener {
         
         private void putKVMessage (String key , String value) {
                 try {
-                	System.out.println("Test1");
+                	
                         KVMessage responseMessage = client.put(key,value);
-                        System.out.println("Test2");
-                        System.out.println("result1 :"+responseMessage.getStatus());
+                       
                         if (responseMessage.getStatus().equals(StatusType.PUT_SUCCESS)) {
                                 System.out.println(PROMPT + "Put was successfull for value " +
                         responseMessage.getValue() + " and key " + responseMessage.getKey());
                         }
-                        if (responseMessage.getStatus().equals(StatusType.PUT)) {
-                            System.out.println(PROMPT + "Put was successfull for value " +
-                    responseMessage.getValue() + " and key " + responseMessage.getKey());
-                    }
+                        
                         else if (responseMessage.getStatus().equals(StatusType.PUT_ERROR)) {
                                 System.out.println(PROMPT + "Put was not successfull , please try again");
                         }
@@ -200,16 +196,12 @@ public class KVClient implements ClientSocketListener {
                 try {
                         KVMessage responseMessage = client.get(key);
                         ///HandleKVMessage responseMessage = (HandleKVMessage) client.get(key);
-                        System.out.println("result2 :"+responseMessage.getStatus());
-                        System.out.println("result3 :"+responseMessage.getKey());
-                        System.out.println("result3 :"+responseMessage.getValue());
+                       
                         
                         if (responseMessage.getStatus().equals(StatusType.GET_SUCCESS)) {
-                                System.out.println(PROMPT + "Key : " + responseMessage.getKey() + " is : " + responseMessage.getValue());
+                                System.out.println(PROMPT + "Key : " + responseMessage.getKey() + " value is : " + responseMessage.getValue());
                         }
-                        if (responseMessage.getStatus().equals(StatusType.GET)) {
-                            System.out.println(PROMPT + "Key : " + responseMessage.getKey() + " is : " + responseMessage.getValue());
-                    }
+                        
                         else if (responseMessage.getStatus().equals(StatusType.GET_ERROR)) {
                                 System.out.println(PROMPT + "There is no value for key : " + responseMessage.getKey());
                         }
@@ -217,7 +209,7 @@ public class KVClient implements ClientSocketListener {
                         printError("Unable to get KVMessage");
                         disconnect();
                 }
-        }
+        } 
         /*
         private void sendMessage(String msg){
                 try {
@@ -252,6 +244,14 @@ public class KVClient implements ClientSocketListener {
                 sb.append("\t establishes a connection to a server\n");
                 sb.append(PROMPT).append("send <text message>");
                 sb.append("\t\t sends a text message to the server \n");
+                
+                sb.append(PROMPT).append("put <key> <value>");
+                sb.append("\t\t Inserts a key-value pair into the storage server data structure.\n \t\t Updates (overwrites) the current value with the given value if the server already contains the specified key.\n \t\tDeletes the entry for the given key if <value> equals null.\n");
+                
+                sb.append(PROMPT).append("get <key>");
+                sb.append("\t\t Retrieves the value for the given key from the storage server. \n");
+                
+                
                 sb.append(PROMPT).append("disconnect");
                 sb.append("\t\t\t disconnects from the server \n");
                 
