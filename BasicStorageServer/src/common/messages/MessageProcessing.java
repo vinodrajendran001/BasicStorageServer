@@ -1,6 +1,6 @@
 package common.messages;
 
-public class HandleKVMessage implements KVMessage {
+public class MessageProcessing implements KVMessage {
     
     
     StatusType status;
@@ -36,7 +36,7 @@ public class HandleKVMessage implements KVMessage {
     
     
     @Override
-    public byte[] encodeKVMessage() {
+    public byte[] messageEncoding() {
             //get the bytes of the key string
             byte keyString[] = this.key.getBytes();
             //get the bytes of the value string
@@ -61,7 +61,7 @@ public class HandleKVMessage implements KVMessage {
     }
 
     @Override
-    public void decodeKVMessage(byte[] KVMessage) {
+    public void messageDecoding(byte[] KVMessage) {
             //put the status from the first byte
             this.status = StatusType.values()[KVMessage[0]];
             //the second bytes contains the length of the string of the key

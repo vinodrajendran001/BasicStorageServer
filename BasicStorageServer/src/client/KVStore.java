@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 import client.ClientSocketListener.SocketStatus;
 
-import common.messages.HandleKVMessage;
+import common.messages.MessageProcessing;
 import common.messages.KVMessage;
 import common.messages.KVMessage.StatusType;
 
@@ -177,25 +177,25 @@ logger.info("try to close connection ...");
 	@Override
 	public KVMessage put(String key, String value) throws Exception {
 
-		HandleKVMessage messageToSend = new HandleKVMessage();
+		MessageProcessing messageToSend = new MessageProcessing();
 		messageToSend.setKey(key);
 		messageToSend.setValue(value);
 		messageToSend.setStatus(StatusType.PUT);
-		this.SendMessage(messageToSend.encodeKVMessage());
-		HandleKVMessage messageToReceive = new HandleKVMessage();
-		messageToReceive.decodeKVMessage(this.receiveMessage());
+		this.SendMessage(messageToSend.messageEncoding());
+		MessageProcessing messageToReceive = new MessageProcessing();
+		messageToReceive.messageDecoding(this.receiveMessage());
 		return messageToReceive;
 	}
 
 	@Override
 	public KVMessage get(String key) throws Exception {
-		HandleKVMessage messageToSend = new HandleKVMessage();
+		MessageProcessing messageToSend = new MessageProcessing();
 		messageToSend.setKey(key);
 		messageToSend.setValue("");
 		messageToSend.setStatus(StatusType.GET);
-		this.SendMessage(messageToSend.encodeKVMessage());
-		HandleKVMessage messageToReceive = new HandleKVMessage();
-		messageToReceive.decodeKVMessage(this.receiveMessage());
+		this.SendMessage(messageToSend.messageEncoding());
+		MessageProcessing messageToReceive = new MessageProcessing();
+		messageToReceive.messageDecoding(this.receiveMessage());
 		
 		return messageToReceive;
 	}

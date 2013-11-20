@@ -33,10 +33,10 @@ private static Logger logger = Logger.getRootLogger();
 	private InputStream input;
 	private OutputStream output;
 	
-	List <Data> p ;
+	List <Pair> p ;
 	
-	private Database db = new Database();
-	private HandleKVMessage hk = new HandleKVMessage();
+	private StorageServer db = new StorageServer();
+	private MessageProcessing hk = new MessageProcessing();
 	
 	//client request to the server
 	private TextMessage request = null;
@@ -56,7 +56,7 @@ private static Logger logger = Logger.getRootLogger();
 	 * Constructs a new CientConnection object for a given TCP socket.
 	 * @param clientSocket the Socket object for the client connection.
 	 */
-	public ClientConnection(Socket clientSocket,List <Data> p) {
+	public ClientConnection(Socket clientSocket,List <Pair> p) {
 		this.p = p ;
 		this.clientSocket = clientSocket;
 		this.isOpen = true;
@@ -89,7 +89,7 @@ private static Logger logger = Logger.getRootLogger();
 					request = receiveMessage();
 					
 					//unmarshall here
-					hk.decodeKVMessage(request.getMsgBytes());
+					hk.messageDecoding(request.getMsgBytes());
 					//load {String command, String key, String value}.
 					command = hk.getStatus().toString();
 					key = hk.getKey();
@@ -170,7 +170,7 @@ private static Logger logger = Logger.getRootLogger();
 					}
 					
 					//marshall here
-					response = hk.encodeKVMessage();
+					response = hk.messageEncoding();
 					sendMessage(new TextMessage(response));
 					
 				/* connection either terminated by the client or lost due to 

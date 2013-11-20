@@ -14,7 +14,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import server.ClientConnection;
-import server.Data;
+import server.Pair;
 
 
 public class KVServer extends Thread  {
@@ -24,7 +24,7 @@ private static Logger logger = Logger.getRootLogger();
         private int port; 
     private ServerSocket serverSocket; 
     private boolean running;
-    List <Data> p = new ArrayList<Data>();
+    List <Pair> p = new ArrayList<Pair>();
         
         /**
          * Start KV Server at given port

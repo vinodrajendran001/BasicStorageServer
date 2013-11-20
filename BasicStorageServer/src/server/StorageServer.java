@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class Database {
+public class StorageServer {
 
         private static Logger logger = Logger.getRootLogger();
         
-        public synchronized String put(List<Data> p, String key, String value) {
+        public synchronized String put(List<Pair> p, String key, String value) {
                 int i = 0;
-                Data temp = new Data();
+                Pair temp = new Pair();
                 temp.setKey(key);
                 temp.setValue(value);
                 
@@ -37,7 +37,7 @@ public class Database {
 
         }
 
-        public synchronized String get(List<Data> p, String key) {
+        public synchronized String get(List<Pair> p, String key) {
                 
                 for (int i = 0; i < p.size(); i++ ) {
                         if ( p.get(i).getKey().equalsIgnoreCase(key) ) {

@@ -12,7 +12,7 @@ import logger.LogSetup;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import common.messages.HandleKVMessage;
+import common.messages.MessageProcessing;
 import common.messages.KVMessage;
 import common.messages.KVMessage.StatusType;
 import common.messages.TextMessage;

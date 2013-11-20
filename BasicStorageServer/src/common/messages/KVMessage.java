@@ -42,14 +42,14 @@ public interface KVMessage {
 
     
     
-    public byte[] encodeKVMessage();
+    public byte[] messageEncoding();
     
     /**
      * @param KVMessage
      * @return A string containing the KVMessage decoded
      * Unmarshalling
      */
-    public void decodeKVMessage(byte[] KVMessage);
+    public void messageDecoding(byte[] KVMessage);
     
 }
 
