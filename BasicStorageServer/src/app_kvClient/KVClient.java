@@ -1,7 +1,5 @@
 package app_kvClient;
 
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -70,7 +68,7 @@ public class KVClient implements ClientSocketListener {
                                         printError("Could not establish connection!");
                                         logger.warn("Could not establish connection!", e);
                                 } catch (Exception e) {
-                                        // THIS WILL BE CHANGED PROBABLY
+                                       
                                         e.printStackTrace();
                                 }
                         } else {
@@ -112,27 +110,7 @@ public class KVClient implements ClientSocketListener {
                          * 
                          * */
                 }
-                /*
-                else  if (tokens[0].equals("send")) {
-                        if(tokens.length >= 2) {
-                                if(client != null && client.isRunning()){
-                                        StringBuilder msg = new StringBuilder();
-                                        for(int i = 1; i < tokens.length; i++) {
-                                                msg.append(tokens[i]);
-                                                if (i != tokens.length -1 ) {
-                                                        msg.append(" ");
-                                                }
-                                        }       
-                                        sendMessage(msg.toString());
-                                } else {
-                                        printError("Not connected!");
-                                }
-                        } else {
-                                printError("No message passed!");
-                        }
-                        
-                }
-                */
+             
                 else if(tokens[0].equals("disconnect")) {
                         disconnect();
                         
@@ -195,7 +173,6 @@ public class KVClient implements ClientSocketListener {
         private void getKVMessage (String key) {
                 try {
                         KVMessage responseMessage = client.get(key);
-                        ///HandleKVMessage responseMessage = (HandleKVMessage) client.get(key);
                        
                         
                         if (responseMessage.getStatus().equals(StatusType.GET_SUCCESS)) {
@@ -210,15 +187,7 @@ public class KVClient implements ClientSocketListener {
                         disconnect();
                 }
         } 
-        /*
-        private void sendMessage(String msg){
-                try {
-                        client.sendMessage(new TextMessage(msg));
-                } catch (IOException e) {
-                        printError("Unable to send message!");
-                        disconnect();
-                }
-        } */
+     
 
         private void connect(String address, int port) 
                         throws UnknownHostException, IOException , Exception {
@@ -246,7 +215,7 @@ public class KVClient implements ClientSocketListener {
                 sb.append("\t\t sends a text message to the server \n");
                 
                 sb.append(PROMPT).append("put <key> <value>");
-                sb.append("\t\t Inserts a key-value pair into the storage server data structure.\n \t\t Updates (overwrites) the current value with the given value if the server already contains the specified key.\n \t\tDeletes the entry for the given key if <value> equals null.\n");
+                sb.append("\t\t Inserts a key-value pair into the storage server data structure.\n \t\t\t\t\t\t\t Updates (overwrites) the current value with the given value if the server already contains the specified key.\n \t\t\t\t\t\t\t Deletes the entry for the given key if <value> equals null.\n");
                 
                 sb.append(PROMPT).append("get <key>");
                 sb.append("\t\t Retrieves the value for the given key from the storage server. \n");

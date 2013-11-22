@@ -19,7 +19,7 @@ import common.messages.KVMessage.StatusType;
 
 public class KVStore implements KVCommInterface {
 
-	
+	 
 	private Logger logger = Logger.getRootLogger();
 	private Set<ClientSocketListener> listeners;
 	private boolean running;
@@ -59,7 +59,7 @@ public class KVStore implements KVCommInterface {
 		output = clientSocket.getOutputStream();
 		input = clientSocket.getInputStream();
 		setRunning(true);
-		byte [] serverResponse = this.receiveMessage();
+		byte [] serverResponse = this.KVrecievemessage();
 		for(ClientSocketListener listener : listeners) {
 			listener.handleNewMessage(new String(serverResponse).trim());
 		}
@@ -70,10 +70,18 @@ public class KVStore implements KVCommInterface {
 	@Override
 	public void disconnect() {
 		// TODO Auto-generated method stub
-logger.info("try to close connection ...");
 		
 		try {
-			tearDownConnection();
+			setRunning(false);
+			logger.info("closing the connection ...");
+			if (clientSocket != null) {
+				input.close();
+				output.close();
+				clientSocket.close();
+				clientSocket = null;
+				logger.info("connection closed!");
+			}
+			
 			for(ClientSocketListener listener : listeners) {
 				listener.handleStatus(SocketStatus.DISCONNECTED);
 			}
@@ -83,17 +91,7 @@ logger.info("try to close connection ...");
 		
 	}
 	
-	private void tearDownConnection() throws IOException {
-		setRunning(false);
-		logger.info("tearing down the connection ...");
-		if (clientSocket != null) {
-			input.close();
-			output.close();
-			clientSocket.close();
-			clientSocket = null;
-			logger.info("connection closed!");
-		}
-	}
+
 	
 	public boolean isRunning() {
 		return running;
@@ -107,25 +105,24 @@ logger.info("try to close connection ...");
 		listeners.add(listener);
 	}
 	
-	public void SendMessage(byte [] message) throws IOException {
-		message = this.addCtrChars(message);
+	public void KVsendmessage(byte [] message) throws IOException {
+		message = this.appendChars(message);
 		output.write(message, 0, message.length);
 		output.flush();
 	}
 	
 	
-	private byte[] receiveMessage() throws IOException {
+	private byte[] KVrecievemessage() throws IOException {
 		
 		int index = 0;
 		byte[] msgBytes = null, tmp = null;
 		byte[] bufferBytes = new byte[BUFFER_SIZE];
 		
-		/* read first char from stream */
+
 		byte read = (byte) input.read();	
 		boolean reading = true;
 		
-		while(read != 13 && reading) {/* carriage return */
-			/* if buffer filled, copy to msg array */
+		while(read != 13 && reading) {
 			if(index == BUFFER_SIZE) {
 				if(msgBytes == null){
 					tmp = new byte[BUFFER_SIZE];
@@ -142,18 +139,15 @@ logger.info("try to close connection ...");
 				index = 0;
 			} 
 			
-			/* only read valid characters, i.e. letters and numbers */
-//			if((read > 31 && read < 127)) {
+
 				bufferBytes[index] = read;
 				index++;
-			//}
-			
-			/* stop reading is DROP_SIZE is reached */
+
 			if(msgBytes != null && msgBytes.length + index >= DROP_SIZE) {
 				reading = false;
 			}
 			
-			/* read next char from stream */
+			
 			read = (byte) input.read();
 		}
 		
@@ -168,9 +162,7 @@ logger.info("try to close connection ...");
 		
 		msgBytes = tmp;
 		
-		/* build final String */
-		/*TextMessage msg = new TextMessage(msgBytes);
-		logger.info("Receive message:\t '" + msg.getMsg() + "'");*/
+	
 		return msgBytes;
     }
 
@@ -181,9 +173,9 @@ logger.info("try to close connection ...");
 		messageToSend.setKey(key);
 		messageToSend.setValue(value);
 		messageToSend.setStatus(StatusType.PUT);
-		this.SendMessage(messageToSend.messageEncoding());
+		this.KVsendmessage(messageToSend.messageEncoding());
 		MessageProcessing messageToReceive = new MessageProcessing();
-		messageToReceive.messageDecoding(this.receiveMessage());
+		messageToReceive.messageDecoding(this.KVrecievemessage());
 		return messageToReceive;
 	}
 
@@ -193,14 +185,14 @@ logger.info("try to close connection ...");
 		messageToSend.setKey(key);
 		messageToSend.setValue("");
 		messageToSend.setStatus(StatusType.GET);
-		this.SendMessage(messageToSend.messageEncoding());
+		this.KVsendmessage(messageToSend.messageEncoding());
 		MessageProcessing messageToReceive = new MessageProcessing();
-		messageToReceive.messageDecoding(this.receiveMessage());
+		messageToReceive.messageDecoding(this.KVrecievemessage());
 		
 		return messageToReceive;
 	}
 	
-	private byte[] addCtrChars(byte[] bytes) {
+	private byte[] appendChars(byte[] bytes) {
 		byte[] ctrBytes = new byte[]{LINE_FEED, RETURN};
 		byte[] tmp = new byte[bytes.length + ctrBytes.length];
 		
